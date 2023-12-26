@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 
 from .models import User, Category, ActiveListing, Bid, Comment
@@ -16,9 +16,30 @@ def index(request):
 @login_required
 def create_listing(request):
     if request.method == "POST":
-        request.POST[""]
+        seller = request.user
+        try:
+            category_id = request.POST["category"]
+            category = get_object_or_404(Category, pk=category_id)
+        except:
+            category = None
+        title = request.POST["title"]
+        description = request.POST["description"]
+        url_photo = request.POST["url_photo"]
+        starting_bid = request.POST["starting_bid"]
+        ActiveListing.objects.create(
+            seller=seller,
+            active=True,
+            category=category,
+            title=title,
+            description=description,
+            url_photo=url_photo,
+            starting_bid=starting_bid,
+            current_bid=starting_bid,
+            current_bid_user=request.user
+        )
+        return HttpResponseRedirect(reverse("index"))
+
     else:
-        
         return render(request, "auctions/create_listing.html", {
             "all_categories": Category.objects.all()
         })

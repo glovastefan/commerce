@@ -7,7 +7,9 @@
     {% for listing in all_listings %}
     {% if listing.active %}
     <li style="margin-bottom: 10px;">
+        {% if listing.url_photo %}
         <img src="{{ listing.url_photo }}" alt="picture of {{ listing.title }}" style="width: 100px; height: auto;" />
+        {% endif %}
         <a href="#" style="text-decoration: none; color: black;">
             {{ listing.title }}: {{ listing.description }}.
         </a>

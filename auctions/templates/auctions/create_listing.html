@@ -23,6 +23,7 @@
             
             <label for="category">Category</label><br>
             <select name="category">
+                <option value="" selected>Select a category</option>
                 {% for category in all_categories %}
                     <option value="{{ category.id }}">{{ category }}</option>
                 {% endfor %}
