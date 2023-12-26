@@ -1,14 +1,27 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from .models import User, Category, ActiveListing, Bid, Comment
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    return render(request, "auctions/index.html", {
+        "all_listings": ActiveListing.objects.all()
+    })
+
+@login_required
+def create_listing(request):
+    if request.method == "POST":
+        request.POST[""]
+    else:
+        
+        return render(request, "auctions/create_listing.html", {
+            "all_categories": Category.objects.all()
+        })
 
 
 def login_view(request):
