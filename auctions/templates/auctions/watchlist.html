@@ -1,0 +1,20 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<h2>Watchlist of {{ user }}</h2>
+
+<ul style="list-style-type: none;">
+    {% for listing in users_watchlist %}
+    <li style="margin-bottom: 10px;">
+        {% if listing.url_photo %}
+        <img src="{{ listing.url_photo }}" alt="picture of {{ listing.title }}" style="width: 100px; height: auto;" />
+        {% endif %}
+        <a href="{% url 'listing_page' listing.id  %}" style="text-decoration: none; color: black;">
+            {{ listing.title }}: {{ listing.description }}.
+        </a>
+        <strong>Current price: ${{ listing.current_bid }}</strong>
+    </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

@@ -10,7 +10,9 @@ from .models import User, Category, ActiveListing, Bid, Comment
 
 def index(request):
     return render(
-        request, "auctions/index.html", {"all_listings": ActiveListing.objects.all().order_by("-active")}
+        request,
+        "auctions/index.html",
+        {"all_listings": ActiveListing.objects.all().order_by("-active")},
     )
 
 
@@ -62,7 +64,8 @@ def remove_from_watchlist(request, id):
     if request.method == "POST":
         listing.watchlisted.remove(current_user)
         return redirect("listing_page", id=listing.id)
-    
+
+
 @login_required
 def place_bid(request, id):
     listing = get_object_or_404(ActiveListing, pk=id)
@@ -79,7 +82,9 @@ def place_bid(request, id):
     if request.method == "POST":
         new_bid = float(request.POST["current_user_bids"])
         if new_bid >= min_bid:
-            bid_to_add = Bid(listing_id=listing, user_id=current_user, bid_value=new_bid)
+            bid_to_add = Bid(
+                listing_id=listing, user_id=current_user, bid_value=new_bid
+            )
             bid_to_add.save()
 
             listing.current_bid = new_bid
@@ -87,17 +92,17 @@ def place_bid(request, id):
             listing.save()
         else:
             return render(
-            request,
-            "auctions/listing.html",
-            {
-                "listing": listing,
-                "current_user": current_user,
-                "is_seller": is_seller,
-                "min_bid": min_bid,
-                "all_comments": all_comments,
-                "error": f"Your Bid must be minimum {min_bid}!"
-            },
-        )
+                request,
+                "auctions/listing.html",
+                {
+                    "listing": listing,
+                    "current_user": current_user,
+                    "is_seller": is_seller,
+                    "min_bid": min_bid,
+                    "all_comments": all_comments,
+                    "error": f"Your Bid must be minimum {min_bid}!",
+                },
+            )
     return redirect("listing_page", id=listing.id)
 
 
@@ -108,9 +113,20 @@ def add_comment(request, id):
     your_comment = request.POST["your_comment"]
     if request.method == "POST":
         if your_comment != "":
-            comment_to_add = Comment(listing_id=listing, user_id=current_user, detailed_comment=your_comment)
+            comment_to_add = Comment(
+                listing_id=listing, user_id=current_user, detailed_comment=your_comment
+            )
             comment_to_add.save()
     return redirect("listing_page", id=listing.id)
+
+
+@login_required
+def users_watchlist(request):
+    current_user = request.user
+    watchlist = current_user.user_watching.all()
+    return render(
+        request, "auctions/watchlist.html", {"users_watchlist": watchlist}
+    )
 
 
 @login_required
