@@ -16,6 +16,26 @@ def index(request):
     )
 
 
+def all_categories(request):
+    return render(
+        request,
+        "auctions/all_categories.html",
+        {"all_categories": Category.objects.all()},
+    )
+
+
+def selected_category(request, id):
+    selected_category = get_object_or_404(Category, pk=id)
+    return render(
+        request,
+        "auctions/selected_category.html",
+        {
+            "selected_category": selected_category,
+            "all_listings": ActiveListing.objects.all()
+        },
+    )
+
+
 @login_required
 def listing_page(request, id):
     listing = get_object_or_404(ActiveListing, pk=id)
@@ -124,9 +144,7 @@ def add_comment(request, id):
 def users_watchlist(request):
     current_user = request.user
     watchlist = current_user.user_watching.all()
-    return render(
-        request, "auctions/watchlist.html", {"users_watchlist": watchlist}
-    )
+    return render(request, "auctions/watchlist.html", {"users_watchlist": watchlist})
 
 
 @login_required
