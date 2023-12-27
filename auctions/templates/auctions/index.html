@@ -1,41 +1,67 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<h2>Active Listings</h2>
-
-<ul style="list-style-type: none;">
-    {% for listing in all_listings %}
-    {% if listing.active %}
-    <li style="margin-bottom: 10px;">
-        {% if listing.url_photo %}
-        <img src="{{ listing.url_photo }}" alt="picture of {{ listing.title }}" style="width: 100px; height: auto;" />
-        {% endif %}
-        <a href="{% url 'listing_page' listing.id  %}" style="text-decoration: none; color: black;">
-            {{ listing.title }}: {{ listing.description }}.
-        </a>
-        <strong>Current price: ${{ listing.current_bid }}</strong>
-    </li>
-    {% endif %}
-    {% endfor %}
-</ul>
-<br>
-<br>
-<h2 style="color: red;">Recently Closed Listings</h2>
-
-<ul style="list-style-type: none;">
-    {% for listing in all_listings %}
-    {% if not listing.active %}
-    <li style="margin-bottom: 10px;">
-        {% if listing.url_photo %}
-        <img src="{{ listing.url_photo }}" alt="picture of {{ listing.title }}" style="width: 100px; height: auto;" />
-        {% endif %}
-        <a href="{% url 'listing_page' listing.id  %}" style="text-decoration: none; color: black;">
-            {{ listing.title }}: {{ listing.description }}.
-        </a>
-        <strong>Current price: ${{ listing.current_bid }}</strong>
-    </li>
-    {% endif %}
-    {% endfor %}
-</ul>
+<div class="container" style="margin-left: 5rem;">
+    <div class="container">
+        <div class="container">
+            <h2>Active Listings</h2>
+        </div>
+        <br>
+        <div class="container">
+            <ul style="list-style-type: none;">
+                {% for listing in all_listings %}
+                {% if listing.active %}
+                <li>
+                    <div class="card" style="width: 25rem;">
+                        {% if listing.url_photo %}
+                        <img src="{{ listing.url_photo }}" class="card-img-top" alt="picture of {{ listing.title }}" style="width: 10rem; height: auto;">
+                        {% endif %}
+                        <div class="card-body">
+                          <h5 class="card-title"><strong>{{ listing.title }}</strong></h5>
+                          <p class="card-text">{{ listing.description }}</p>
+                          <h5><strong>Current price: ${{ listing.current_bid }}</strong></h5>
+                          <a href="{% url 'listing_page' listing.id  %}" class="btn btn-primary">More details</a>
+                        </div>
+                    </div>
+                    <br>
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    
+    <br>
+    <br>
+    
+    <div class="container">
+        <div class="container">
+            <h3 style="color: red; font-style: italic;">Recently Closed Listings</h3>
+        </div>
+        <br>
+        <div class="container">
+            <ul style="list-style-type: none;">
+                {% for listing in all_listings %}
+                {% if not listing.active %}
+                <li>
+                    <div class="card" style="width: 15rem;">
+                        {% if listing.url_photo %}
+                        <img src="{{ listing.url_photo }}" class="card-img-top" alt="picture of {{ listing.title }}" style="width: 5rem; height: auto;">
+                        {% endif %}
+                        <div class="card-body">
+                          <h5 class="card-title"><strong>{{ listing.title }}</strong></h5>
+                          <p class="card-text">{{ listing.description }}</p>
+                          <h5><strong>Current price: ${{ listing.current_bid }}</strong></h5>
+                          <a href="{% url 'listing_page' listing.id  %}" class="btn btn-primary">More details</a>
+                        </div>
+                    </div>
+                    <br>
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

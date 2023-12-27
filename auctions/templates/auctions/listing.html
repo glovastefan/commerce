@@ -1,118 +1,123 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<div>
-    <h2 style="font-weight: bold;">TITLE: {{ listing.title }}</h2>
-    <br>
+<div class="container">
     {% if listing.active %}
-        <div>
-            <h3 style="font-weight: bold;">View details:</h3>
-            <h4>Description: {{ listing.description }}</h4>
-            <h4>Seller: {{ listing.seller }}</h4>
-            {% if listing.url_photo %}
-            <h4>Photo: <img src="{{ listing.url_photo }}" alt="picture of {{ listing.title }}" style="width: 100px; height: auto;" /></h4>
-            {% else %}
-            <h4>Photo not available</h4>
-            {% endif %}
-            <h4>Starting Bid: ${{ listing.starting_bid }}</h4>
-            <h4>Current Bid: ${{ listing.current_bid }}</h4>
-        </div>
-        <br>
-        <div>
-            <h3 style="font-weight: bold;">Buyer's Actions:</h3>
-            {% if current_user == listing.current_bid_user %}
-            <h4 style="color:red">Your Bid is currently highest</h4>
-            {% else %}
-            <h4 style="color:red">Your Bid is not highest - do you want to bid?</h4>
-            <p>Your bit must be higher than current bit to be accepted.</p>
-            {% if error %}
-                <p style="color:red; font-style: italic;" >ERROR: {{ error }}</p>
-            {% endif %}
-            <form action="{% url 'place_bid' listing.id %}" method="POST">
-                {% csrf_token %}
-                <label for="current_user_bids">Bid more than {{ listing.current_bid }}</label>
-                <input type="number" id="current_user_bids" name="current_user_bids">
-                <input type="submit" value="Place Your Bid">
-            </form>
-            {% endif %}
-            <br>
-            {% if request.user in listing.watchlisted.all %}
-            <form action="{% url 'remove_from_watchlist' listing.id %}" method="POST">
-                {% csrf_token %}
-                <input type="submit" value="Remove from Your Watchlist">
-            </form>
-            {% else %}
-                <form action="{% url 'add_to_watchlist' listing.id %}" method="POST">
-                    {% csrf_token %}
-                    <input type="submit" value="Add to Your Watchlist">
-                </form>
-            {% endif %}
-        </div>
-        <br>
-        <div>
-            <h3 style="font-weight: bold;">Comments</h3>
-            {% if all_comments == "No any comments yet!" %}
-            <p>No any comments yet!</p>
-            {% else %}
-            <ul>
-                {% for comment in all_comments %}
-                <li style="margin-bottom: 10px;">
-                    <p>{{ comment.detailed_comment }}</p>
-                    <p style="font-style: italic; font-size: small;">By {{ comment.user_id }} Created at: {{ comment.created_at }}</p>
-                </li>
-                <br>
-                
-                {% endfor %}
-            </ul>
-            {% endif %}
-            <h4>Add comment</h4>
-            <form action="{% url 'add_comment' listing.id %}" method="POST">
-                {% csrf_token %}
-                <textarea name="your_comment" id="your_comment" cols="30" rows="2"></textarea><br>
-                <input type="submit" value="Submit your comment">
-            </form>
-        </div>
-        <br>
-        <div>
-            {% if is_seller %}
-            <h3 style="font-weight: bold;">Seller's Actions:</h3>
-            <h4>Active: {{ listing.active }}</h4>
-            <form action="{% url 'listing_page' listing.id %}" method="POST">
-                {% csrf_token %}
-                <input type="submit" value="Close Listing">
-            </form>
-            {% endif %}
-        </div>
-    {% else %}
-        <div>
-            {% if current_user == listing.current_bid_user %}
-                <h1 style="color: green;">Your Bid won. Enjoy {{ listing.title }}</h1>
-            {% else %}
-                <h1 style="color: red;">Someone's else bid won. Try some of active listings</h1>
-            {% endif %}
-            <div>
-                <h4>Description: {{ listing.description }}</h4>
-                <h4>Seller: {{ listing.seller }}</h4>
+        <div class="container">
+            <div class="card" style="width: 30rem;">
+                <div class="card-body">
+                    <h2 class="card-title" style="margin-left: 2rem;"><strong>{{ listing.title }}</strong></h2>
+                </div>
                 {% if listing.url_photo %}
-                <h4>Photo: <img src="{{ listing.url_photo }}" alt="picture of {{ listing.title }}" style="width: 100px; height: auto;" /></h4>
+                <img src="{{ listing.url_photo }}" class="card-img-top" alt="picture of {{ listing.title }}" style="width: 26rem; height: auto; margin-left: 2rem;" >
                 {% else %}
                 <h4>Photo not available</h4>
                 {% endif %}
+                <div class="card-body" style="margin-left: 1rem;">
+                    <p class="card-text">{{ listing.description }}</p>
+                    <h4>Seller: {{ listing.seller }}</h4>
+                    <h4>Starting Bid: ${{ listing.starting_bid }}</h4>
+                    <h5><strong>Current Bid: ${{ listing.current_bid }}</strong></h5>
+                    {% if current_user == listing.current_bid_user %}
+                    <h4 style="color:red">Your Bid is currently highest</h4>
+                        {% else %}
+                    <p style="color:red">Your Bid is not highest - do you want to bid?</p>
+                        {% if error %}
+                        <p style="color:red; font-style: italic;" >ERROR: {{ error }}</p>
+                        {% endif %}
+                    <form action="{% url 'place_bid' listing.id %}" method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                          <label for="current_user_bids" class="form-label">Bid more than {{ listing.current_bid }}</label>
+                          <input type="number" class="form-control" id="current_user_bids" name="current_user_bids">
+                        </div>
+                        <button type="submit" class="btn btn-secondary">Place your Bid</button>
+                    </form>
+                  {% endif %}
+                </div>
             </div>
-        </div>
+            <div class="card" style="width: 30rem; margin-top: 1rem;">
+                <div class="card-body">
+                    {% if request.user in listing.watchlisted.all %}
+                    <div class="mb-3">
+                        <form action="{% url 'remove_from_watchlist' listing.id %}" method="POST">
+                            {% csrf_token %}
+                            <p>{{ listing.title }} is in your watchlist.</p>
+                            <button type="submit" class="btn btn-danger">Remove from Your Watchlist</button>
+                        </form>
+                    </div>
+                    {% else %}
+                    <div class="mb-3">
+                        <form action="{% url 'add_to_watchlist' listing.id %}" method="POST">
+                            {% csrf_token %}
+                            <p>Do you like {{ listing.title }}?</p>
+                            <button type="submit" class="btn btn-success">Add to Your Watchlist</button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% if is_seller %}
+            <div class="card" style="width: 30rem; margin-top: 1rem;">
+                <div class="card-body">
+                    <h4 style="font-weight: bold;">Update listing status</h4>
+                    <p>{{ listing }} is active and accepts new bids.</p>
+                    <p>If you close the listing, highest bid will get {{ listing }}</p>
+                    <form action="{% url 'listing_page' listing.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger" >Close Listing</button>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+            <div class="card" style="width: 30rem; margin-top: 1rem;">
+                <div class="card-body">
+                    <h3 style="font-weight: bold; margin-left: 1rem;">Comments</h3>
+                    {% if all_comments == "No any comments yet!" %}
+                    <p>No any comments yet!</p>
+                    {% else %}
+                    <ul style="list-style-type: none;">
+                        {% for comment in all_comments %}
+                        <div class="card" style="margin-bottom: 0.5rem;">
+                            <div class="card-body">
+                                <li>
+                                    <h5 style="font-style: italic; font-size: small;">By {{ comment.user_id }} Created at: {{ comment.created_at }}</h5>
+                                    <p>{{ comment.detailed_comment }}</p>
+                                </li>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                    <h5 style="font-weight: bold; margin-left: 0.5rem;">Add New comment</h5>
+                        <form action="{% url 'add_comment' listing.id %}" method="POST">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <textarea name="your_comment" id="your_comment" cols="30" rows="2"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-secondary">Submit your comment</button>
+                        </form>
+                </div>
+            </div>
+    {% else %}    
+    <div class="container">
+        {% if current_user == listing.current_bid_user %}
+            <h1 style="color: green;">Your Bid won. Enjoy {{ listing.title }}</h1>
+        {% else %}
+            <h1 style="color: red;">Someone's else bid won. Try some of active listings</h1>
+        {% endif %}
+        <div class="card" style="width: 25rem;">
+            {% if listing.url_photo %}
+            <img src="{{ listing.url_photo }}" class="card-img-top" alt="picture of {{ listing.title }}" style="width: 10rem; height: auto;">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title"><strong>{{ listing.title }}</strong></h5>
+              <p class="card-text">{{ listing.description }}</p>
+              <h5><strong>Final Bid: ${{ listing.current_bid }}</strong></h5>
+            </div>
+        </div>        
+    </div>
     {% endif %}
-
-
 </div>
-
-
-
-
-
-
-
-
-
-
 
 {% endblock %}

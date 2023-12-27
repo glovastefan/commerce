@@ -1,41 +1,57 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<div>
+<div class="container" style="margin-left: 5rem;">
     <h2>Create New Listing</h2>
     <div>
         <form action="{% url 'create_listing' %}" method="POST">
             {% csrf_token %}
-        
-            <label for="title">Title</label><br>
-            <input type="text" id="title" name="title"><br>
-            <br>
-        
-            <label for="description">Description</label><br>
-            <textarea name="description" id="description" cols="18" rows="2"></textarea><br>
-            <br>
-        
-            <label for="starting_bid">Starting Bid</label><br>
-            <input type="text" id="starting_bid" name="starting_bid"><br>
-            <br>
+            <div class="row mb-3">
+                <label for="title" class="col-sm-2 col-form-label">Title</label>
+                <div class="col-auto">
+                    <input type="text" class="form-control" id="title" name="title">
+                </div>
+            </div>
 
-            <h4>Optional:</h4>
+            <div class="row mb-3">
+                <label for="description" class="col-sm-2 col-form-label">Description</label>
+                <div class="col-auto">
+                    <textarea name="description" id="description" rows="2"></textarea>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="starting_bid" class="col-sm-2 col-form-label">Starting Bid</label>
+                <div class="col-auto">
+                    <input type="text" class="form-control" id="starting_bid" name="starting_bid">
+                </div>
+            </div>
+            <br>
+            <h4 style="font-style: italic;">Optional:</h4>
             
-            <label for="category">Category</label><br>
-            <select name="category">
-                <option value="" selected>Select a category</option>
-                {% for category in all_categories %}
-                    <option value="{{ category.id }}">{{ category }}</option>
-                {% endfor %}
-            </select>
-            <br>
-            <br>  
-        
-            <label for="url_photo">Photo (url link)</label><br>
-            <input type="text" id="url_photo" name="url_photo"><br>
-            <br>
-        
-            <input type="submit" value="Create New Listing">
+            <div class="row mb-3">
+                <label for="category" class="col-sm-2 col-form-label">Category</label>
+                <div class="col-auto">
+                    <select name="category" class="form-control">
+                        <option value="" selected>Select a category</option>
+                        {% for category in all_categories %}
+                            <option value="{{ category.id }}">{{ category }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="url_photo" class="col-sm-2 col-form-label">Photo (url)</label>
+                <div class="col-auto">
+                    <input type="text" class="form-control" id="url_photo" name="url_photo"><br>
+                </div>
+            </div>
+
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Create New Listing</button>
+            </div>
+
         </form>
     </div>
 </div>

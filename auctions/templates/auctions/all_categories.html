@@ -1,17 +1,26 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<h2>Choose which category you want to see</h2>
-<br>
-<ul>
-    {% for category in all_categories %}
-    <li>
-        <a href="{% url 'selected_category' category.id %}" style="color: black; font-weight: bold; font-size: large;">
-            {{ category }}
-        </a>
-    </li>
-    {% endfor %}
-</ul>
+
+<div class="container" style="margin-left: 5rem;">
+    <div class="container">
+        <h2>Choose which category you want to see</h2>
+    </div>
+    <div class="container">
+        <ul class="list-group">
+            {% for category in all_categories %}
+            <li class="list-group-item">
+                <a href="{% url 'selected_category' category.id %}" style="color: black; font-weight: bold; font-size: large;">
+                    {{ category }}
+                </a>
+            </li>
+
+            {% endfor %}
+          </ul>
+    </div>
+
+</div>
+
 
 
 {% endblock %}

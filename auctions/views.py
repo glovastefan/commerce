@@ -12,7 +12,7 @@ def index(request):
     return render(
         request,
         "auctions/index.html",
-        {"all_listings": ActiveListing.objects.all().order_by("-active")},
+        {"all_listings": ActiveListing.objects.all().order_by("-id")},
     )
 
 
