@@ -11,7 +11,9 @@
                 {% if listing.url_photo %}
                 <img src="{{ listing.url_photo }}" class="card-img-top" alt="picture of {{ listing.title }}" style="width: 26rem; height: auto; margin-left: 2rem;" >
                 {% else %}
-                <h4>Photo not available</h4>
+                <div class="card-body" style="margin-left: 1rem;">
+                    <h4>Photo not available</h4>
+                </div>
                 {% endif %}
                 <div class="card-body" style="margin-left: 1rem;">
                     <p class="card-text">{{ listing.description }}</p>
